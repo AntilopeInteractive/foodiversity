@@ -22,25 +22,30 @@ if (ancho > 800) {
   var disparoS
   var descender = null
   var user
+  var username
   var mensajeServidor
   var puntajeServidor
 
 
   function openswal() {
     swal({
-      title: '<div> <h2 class="tituloPuntajeSwal">GAME OVER</h2> <p class="puntajeSwal">'+ score + ' ' + 'Puntos </p> <textarea cols="0" rows="0" class="correoJuego" placeholder="Email"></textarea><p class="advertenciaCorreo">debes digitar tu correo</p></div>',
+      title: '<div> <h2 class="tituloPuntajeSwal">GAME OVER</h2> <p class="puntajeSwal">'+ score + ' ' + 'Puntos </p> <textarea cols="0" rows="0" class="usuarioJuego" placeholder="Usuario"></textarea><p class="advertenciaCorreo">debes digitar un nuevo usuario o un usuario ya registrado</p><textarea cols="0" rows="0" class="correoJuego" placeholder="Email"></textarea><p class="advertenciaCorreo">debes digitar tu correo</p></div>',
       customClass: 'modalJuegoSwal',
       confirmButtonColor: '#ec3345',
       customClass: 'swalGamer',
       confirmButtonClass: 'btnSwalJuego',
       html: true,
-      showLoaderOnConfirm: true,
-      confirmButtonText:'Registrar tu puntaje'
+      closeOnConfirm: false,
+      // showLoaderOnConfirm: true,
+      confirmButtonText:'Registrar tu puntaje',
+      allowEscapeKey: false
     }, function() {
-      if ($('.correoJuego').val() === '' || $('.correoJuego').val() === null) {
-        GameOver.validarCorreo()
+      if ($('.correoJuego').val() === '' || $('.correoJuego').val() === null || $('.usuarioJuego').val() === '' || $('.usuarioJuego').val() === null) {
+        // GameOver.validarCorreo()
+
       } else {
         user = $('.correoJuego').val()
+        username = $('.usuarioJuego').val()
         GameOver.registroPuntaje()
       }
     })
@@ -353,7 +358,8 @@ if (ancho > 800) {
     registroPuntaje: function() {
       const userPuntaje = {
         puntaje: score,
-        usuario: user,
+        usuario: username,
+        correoElectronico: user,
         fechaRegistro: Date.now()
       }
       const self = this
@@ -364,9 +370,17 @@ if (ancho > 800) {
           success:function(response) {
             score = 0
             user = ''
+            username = ''
             mensajeServidor = response.mensaje
             puntajeServidor = response.puntaje
             self.state.start('Reset')
+            swal.close()
+          },
+          error: function() {
+            score = 0
+            user = ''
+            username = ''
+            self.state.start('HomeState')
           }
       })
     }

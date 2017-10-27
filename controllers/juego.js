@@ -4,9 +4,11 @@ const Juego = require('../models/juego')
 function registroPuntaje(req, res) {
   const nuevoUser = new Juego()
   nuevoUser.puntaje = parseInt(req.body.puntaje, 10)
-  nuevoUser.correoElectronico = req.body.usuario
+  nuevoUser.correoElectronico = req.body.correoElectronico
+  nuevoUser.usuario = req.body.usuario
   nuevoUser.fechaRegistro = req.body.fechaRegistro
-  Juego.findOne({correoElectronico: req.body.usuario}, (err, user) => {
+  console.log(nuevoUser)
+  Juego.findOne({usuario: req.body.usuario}, (err, user) => {
     if (err) {
       console.log(err)
     }

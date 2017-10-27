@@ -5,6 +5,7 @@ const Schema = mongoose.Schema
 
 const JuegoSchema = Schema({
   puntaje: Number,
+  usuario: String,
   correoElectronico: String,
   fechaRegistro: Date
 })

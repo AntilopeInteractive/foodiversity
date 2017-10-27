@@ -64,10 +64,22 @@ function deleteParticipante(req, res) {
     if (err) {
       console.log(err)
     }
-    user.remove((err, elim) => {
-      if (err) {
-        console.log(err)
-      }
+    if (user) {
+      user.remove((err, elim) => {
+        if (err) {
+          console.log(err)
+        }
+        Participante.find({}, (err, data) => {
+          if (err) {
+            console.log(err)
+          }
+          res.send({
+            participantes: data
+          })
+        })
+      })
+    }
+    if (!user) {
       Participante.find({}, (err, data) => {
         if (err) {
           console.log(err)
@@ -76,7 +88,7 @@ function deleteParticipante(req, res) {
           participantes: data
         })
       })
-    })
+    }
   })
 }
 

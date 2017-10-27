@@ -18,16 +18,26 @@ function landingData(req, res) {
         if (err) {
           console.log(err);
         }
-        Video.find({}, (err, video) => {
+        Video.findOne({usuario: 'admin'}, (err, video) => {
           if (err) {
             console.log(err)
           }
-          res.send({
-            participantes: participantes,
-            juego: juego,
-            referidos: referidos,
-            video: video
-          })
+          if(video) {
+            res.send({
+              participantes: participantes,
+              juego: juego,
+              referidos: referidos,
+              video: video.link
+            })
+          }
+          if(!video) {
+            res.send({
+              participantes: participantes,
+              juego: juego,
+              referidos: referidos,
+              video: ''
+            })
+          }
         })
       })
     })
