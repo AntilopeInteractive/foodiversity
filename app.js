@@ -10,6 +10,7 @@ const helmet = require('helmet')
 
 const app = express()
 
+const Ranking = require('./models/ranking.js')
 const Admin = require('./models/admin.js')
 const Ip = require('./models/ip.js')
 const Landing = require('./controllers/landing.js')
@@ -38,6 +39,28 @@ Admin.findOne({username: 'admin'}, (err, userAdmin) => {
         console.log(err)
       }
       console.log('primer usuario creado')
+    })
+  }
+})
+//primer ranking
+const ranking = new Ranking()
+ranking.puntajes = []
+ranking.usuarios = []
+ranking.fechas = []
+ranking.id = 'foodiversity'
+Ranking.findOne({id: 'foodiversity'}, (err, rank) => {
+  if (err) {
+    console.log(err)
+  }
+  if (rank) {
+    console.log('rank existe')
+  }
+  if (!rank) {
+    ranking.save((err, save) => {
+      if (err) {
+        console.log(err)
+      }
+      console.log('ranking creado')
     })
   }
 })

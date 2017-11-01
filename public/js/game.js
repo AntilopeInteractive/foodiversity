@@ -25,11 +25,13 @@ if (ancho > 800) {
   var username
   var mensajeServidor
   var puntajeServidor
+  var puntajesSever
+  var usuarioServer
 
 
   function openswal() {
     swal({
-      title: '<div> <h2 class="tituloPuntajeSwal">GAME OVER</h2> <p class="puntajeSwal">'+ score + ' ' + 'Puntos </p> <textarea cols="0" rows="0" class="usuarioJuego" placeholder="Usuario"></textarea><p class="advertenciaCorreo">debes digitar un nuevo usuario o un usuario ya registrado</p><textarea cols="0" rows="0" class="correoJuego" placeholder="Email"></textarea><p class="advertenciaCorreo">debes digitar tu correo</p></div>',
+      title: '<div> <h2 class="tituloPuntajeSwal">GAME OVER</h2> <p class="puntajeSwal">'+ score + ' ' + 'Puntos </p> <textarea indexTab="1" cols="0" rows="0" class="usuarioJuego" placeholder="Usuario"></textarea><p class="advertenciaCorreo">debes digitar un nuevo usuario o un usuario ya registrado</p><textarea indexTab="2" cols="0" rows="0" class="correoJuego" placeholder="Email"></textarea><p class="advertenciaCorreo">debes digitar tu correo</p></div>',
       customClass: 'modalJuegoSwal',
       confirmButtonColor: '#ec3345',
       customClass: 'swalGamer',
@@ -39,10 +41,9 @@ if (ancho > 800) {
       // showLoaderOnConfirm: true,
       confirmButtonText:'Registrar tu puntaje',
       allowEscapeKey: false
-    }, function() {
+    }, function(val) {
       if ($('.correoJuego').val() === '' || $('.correoJuego').val() === null || $('.usuarioJuego').val() === '' || $('.usuarioJuego').val() === null) {
         // GameOver.validarCorreo()
-
       } else {
         user = $('.correoJuego').val()
         username = $('.usuarioJuego').val()
@@ -162,7 +163,9 @@ if (ancho > 800) {
     },
     update: function() {
       background.tilePosition.y += 2;
-
+      if (enemigos.alive && nave.alive) {
+        enemigos.y += 0.08;
+      }
       if (nave.alive)
       {
           //  control naves
@@ -223,15 +226,18 @@ if (ancho > 800) {
         //  animacion movimiento enemigos
         var tween = this.game.add.tween(enemigos).to( { x: 140 }, 1000, Phaser.Easing.Linear.None, true, 0, 1000, true);
 
-        this.descenderEnemigo()
+        // this.descenderEnemigo()
     },
-    descenderEnemigo: function() {
-      console.log('descender');
-      enemigos.y += 10;
-      if (enemigos.alive) {
-        descender = setInterval(this.descenderEnemigo, 3000);
-      }
-    },
+    // descenderEnemigo: function() {
+    //   if (enemigos.alive && nave.alive) {
+    //     console.log('descender');
+    //     enemigos.y += 10;
+    //     descender = setInterval(this.descenderEnemigo, 3000);
+    //   } else {
+    //     console.log('descender');
+    //     return clearInterval(descender)
+    //   }
+    // },
     matarEnemigo: function(bullet, enemigo) {
 
         //  When a bullet hits an enemigo we kill them both
@@ -374,6 +380,8 @@ if (ancho > 800) {
             mensajeServidor = response.mensaje
             puntajeServidor = response.puntaje
             self.state.start('Reset')
+            puntajesSever = response.ranking.puntajes
+            usuarioServer = response.ranking.usuarios
             swal.close()
           },
           error: function() {
@@ -388,6 +396,7 @@ if (ancho > 800) {
   var Reset = {
     preload: function() {
       this.game.load.image('btnRegistro', '../assets__game/btn-reset.png');
+      this.game.load.image('btnPuntaje', '../assets__game/puntajes.png');
     },
     create: function() {
       this.game.stage.backgroundColor = "#ec3345";
@@ -399,24 +408,64 @@ if (ancho > 800) {
       puntajeText.anchor.setTo(0.5, 0.5);
       puntajeText.fill = '#fff';
 
-      var btnRegistro = this.game.add.button(400, game.world.centerY + 80, 'btnRegistro', this.reset, this);
-          btnRegistro.anchor.setTo(0.5, 0.5);
+      var btnRegistro = this.game.add.button(410, game.world.centerY + 80, 'btnRegistro', this.reset, this);
+          btnRegistro.anchor.setTo(0, 0.5);
           btnRegistro.scale.setTo(0.9, 0.9)
 
+      var btnRanking = this.game.add.button(390, game.world.centerY + 80, 'btnPuntaje', this.puntajes, this);
+          btnRanking.anchor.setTo(1, 0.5);
+          btnRanking.scale.setTo(0.9, 0.9)
+
+    },
+    puntajes: function() {
+      this.state.start('Ranking')
     },
     reset: function() {
       mensajeServidor: ''
       puntajeServidor: ''
-      this.state.start('InitGame')
+      this.state.start('HomeState')
     }
   }
+  var Ranking = {
+    preload: function() {
+      this.game.load.image('btVolver', '../assets__game/volver.png');
+      // this.game.load.image('background', '../assets__game/starfield.png');
+    },
+    create: function() {
+      this.game.stage.backgroundColor = "#ec3345";
+      // background = this.game.add.tileSprite(0, 0, 800, 600, 'background');
+      var marginBottom = 0
+      for (var i = 0; i < 10; i++) {
+        marginBottom += 40
+        var pos = game.add.text(120, 40 + marginBottom, i+1 + '.', { font: "22px pixe", align: "left" });
+        pos.anchor.setTo(0.5, 0.5);
+        pos.fill = '#fff';
 
+        var stateText = game.add.text(game.world.centerX, 40 + marginBottom, usuarioServer[i], { font: "22px pixe", align: "left" });
+        stateText.anchor.setTo(0.5, 0.5);
+        stateText.fill = '#fff';
+
+        var puntos = game.add.text(640, 40 + marginBottom, puntajesSever[i], { font: "22px pixe", align: "left" });
+        puntos.anchor.setTo(0.5, 0.5);
+        puntos.fill = '#fff';
+      }
+
+      var btVolver = this.game.add.button(400, 510, 'btVolver', this.volver, this);
+          btVolver.anchor.setTo(0.5, 0.5);
+          btVolver.scale.setTo(0.9, 0.9)
+
+    },
+    volver: function() {
+      this.state.start('Reset')
+    }
+  }
 
 
   game.state.add('HomeState', HomeState)
   game.state.add('InitGame', InitGame)
   game.state.add('GameOver', GameOver)
   game.state.add('Reset', Reset)
+  game.state.add('Ranking', Ranking)
   game.state.start('HomeState')
 
 }

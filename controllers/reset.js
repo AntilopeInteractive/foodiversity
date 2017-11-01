@@ -7,6 +7,7 @@ const Video = require('../models/video.js')
 const Ip = require('../models/ip.js')
 const Newsletter = require('../models/newsletter')
 const Juego = require('../models/juego')
+const Ranking = require('../models/ranking')
 
 function reset(req, res) {
   Cupones.collection.drop((err, elim) => {
@@ -41,8 +42,13 @@ function reset(req, res) {
                   if (err) {
                     console.log(err)
                   }
-                  res.send({
-                    mensaje: 'La aplicación volvio a cero'
+                  Ranking.collection.drop((err, elim) => {
+                    if (err) {
+                      console.log(err)
+                    }
+                    res.send({
+                      mensaje: 'La aplicación volvio a cero'
+                    })
                   })
                 })
               })
