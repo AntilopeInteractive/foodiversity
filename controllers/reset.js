@@ -42,12 +42,20 @@ function reset(req, res) {
                   if (err) {
                     console.log(err)
                   }
-                  Ranking.collection.drop((err, elim) => {
+                  Ranking.findOne({id: 'foodiversity'},(err, rank) => {
                     if (err) {
                       console.log(err)
                     }
-                    res.send({
-                      mensaje: 'La aplicación volvio a cero'
+                    rank.puntajes = []
+                    rank.usuarios = []
+                    rank. fechas = []
+                    rank.save((err, reset) => {
+                      if (err) {
+                        console.log(err)
+                      }
+                      res.send({
+                        mensaje: 'La aplicación volvio a cero'
+                      })
                     })
                   })
                 })

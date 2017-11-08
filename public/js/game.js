@@ -164,7 +164,31 @@ if (ancho > 800) {
     update: function() {
       background.tilePosition.y += 2;
       if (enemigos.alive && nave.alive) {
-        enemigos.y += 0.08;
+        enemigos.y += 0.1;
+      }
+      if (enemigos.y === 600) {
+        enemigos.callAll('kill')
+        this.crearEnemigos()
+        balasEnemigoss.callAll('kill')
+
+        // nave
+        bullet.kill();
+        explosionS.play()
+        live = lives.getFirstAlive();
+        if (live)
+        {
+            live.kill();
+        }
+        var explosion = explosiones.getFirstExists(false);
+        explosion.reset(nave.body.x = 400, nave.body.y = 560);
+        explosion.play('explosion', 30, false, true);
+        if (lives.countLiving() < 1)
+        {
+            nave.kill();
+            balasEnemigoss.callAll('kill');
+            clearInterval(descender)
+            this.state.start('GameOver')
+        }
       }
       if (nave.alive)
       {
