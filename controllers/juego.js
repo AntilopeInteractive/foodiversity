@@ -10,7 +10,7 @@ function registroPuntaje(req, res) {
   nuevoUser.fechaRegistro = req.body.fechaRegistro
   var mensaje = ''
   var puntajeGuardado
-  Juego.findOne({usuario: req.body.usuario}, (err, user) => {
+  Juego.findOne({usuario: req.body.usuario, correoElectronico: req.body.correoElectronico}, (err, user) => {
     if (err) {
       console.log(err)
     }
