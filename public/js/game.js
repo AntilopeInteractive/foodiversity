@@ -28,16 +28,20 @@ if (ancho > 800) {
   var puntajesSever
   var usuarioServer
 
-
+  function closeBtnModal() {
+    alert('funciono')
+  }
+  //<a id="closeBtnModal">x</a>
   function openswal() {
     swal({
-      title: '<div> <h2 class="tituloPuntajeSwal">GAME OVER</h2> <p class="puntajeSwal">'+ score + ' ' + 'Puntos </p> <textarea indexTab="1" cols="0" rows="0" class="usuarioJuego" placeholder="Usuario"></textarea><p class="advertenciaCorreo">debes digitar un nuevo usuario o un usuario ya registrado</p><textarea indexTab="2" cols="0" rows="0" class="correoJuego" placeholder="Email"></textarea><p class="advertenciaCorreo">debes digitar tu correo</p></div>',
+      title: '<div>  <h2 class="tituloPuntajeSwal">GAME OVER</h2> <p class="puntajeSwal">'+ score + ' ' + 'Puntos </p> <textarea indexTab="1" cols="0" rows="0" class="usuarioJuego" placeholder="Usuario"></textarea><p class="advertenciaCorreo">debes digitar un nuevo usuario o un usuario ya registrado</p><textarea indexTab="2" cols="0" rows="0" class="correoJuego" placeholder="Email"></textarea><p class="advertenciaCorreo">debes digitar tu correo</p></div>',
       customClass: 'modalJuegoSwal',
       confirmButtonColor: '#ec3345',
       customClass: 'swalGamer',
       confirmButtonClass: 'btnSwalJuego',
       html: true,
       closeOnConfirm: false,
+      showCloseButton: true,
       // showLoaderOnConfirm: true,
       confirmButtonText:'Registrar tu puntaje',
       allowEscapeKey: false
@@ -57,6 +61,8 @@ if (ancho > 800) {
       this.game.load.image('galagaLogo', '../assets/galaga.png');
       this.game.load.image('text1', '../assets__game/ganaboletas.png');
       this.game.load.image('text2', '../assets__game/clickaqui.png');
+      this.game.load.image('instruc1', '../assets__game/instruc1.png');
+      this.game.load.image('instruc2', '../assets__game/instruc2.png');
 
       //sonidos
       this.game.load.audio('explosionS', '../assets__game/explode.wav');
@@ -78,17 +84,25 @@ if (ancho > 800) {
       scoreText = game.add.text(10, 20, 'SCORE : ' + score, styleTxt);
       scoreText.fill = '#ec3345';
       //  logo
-      var galagaLogo = this.game.add.button(400, 300, 'galagaLogo', this.iniciarJuego, this);
+      var galagaLogo = this.game.add.button(400, 240, 'galagaLogo', this.iniciarJuego, this);
       galagaLogo.anchor.setTo(0.5, 0.5);
       galagaLogo.scale.setTo(0.5, 0.5)
 
-      var text1 = this.game.add.button(400, 300 - 70, 'text1', this.iniciarJuego, this);
+      var text1 = this.game.add.button(400, 300 - 140, 'text1', this.iniciarJuego, this);
       text1.anchor.setTo(0.5, 0.5);
       text1.scale.setTo(0.8, 0.8)
 
-      var text2 = this.game.add.button(400, 300 + 70, 'text2', this.iniciarJuego, this);
+      var text2 = this.game.add.button(400, 300 + 20, 'text2', this.iniciarJuego, this);
       text2.anchor.setTo(0.5, 0.5);
       text2.scale.setTo(0.8, 0.8)
+
+      var instruccion1 = this.game.add.button(400, 300 + 120, 'instruc1', this.iniciarJuego, this);
+      instruccion1.anchor.setTo(0.5, 0.5);
+      instruccion1.scale.setTo(0.8, 0.8)
+
+      var instruccion2 = this.game.add.button(400, 300 + 160, 'instruc2', this.iniciarJuego, this);
+      instruccion2.anchor.setTo(0.5, 0.5);
+      instruccion2.scale.setTo(0.8, 0.8)
     },
     iniciarJuego: function() {
       this.state.start('InitGame')

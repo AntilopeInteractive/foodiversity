@@ -16,7 +16,7 @@ function registroNewsletter(req, res) {
       if (req.body.referido === 'false' || req.body.referido === false) {
         res.send({
           mensaje: 'Registrado',
-          codigo: 0
+          codigo: 2
         })
       } else {
         guardarReferidos()
