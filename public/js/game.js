@@ -34,7 +34,7 @@ if (ancho > 800) {
   //<a id="closeBtnModal">x</a>
   function openswal() {
     swal({
-      title: '<div>  <h2 class="tituloPuntajeSwal">GAME OVER</h2> <p class="puntajeSwal">'+ score + ' ' + 'Puntos </p> <textarea indexTab="1" cols="0" rows="0" class="usuarioJuego" placeholder="Usuario"></textarea><p class="advertenciaCorreo">debes digitar un nuevo usuario o un usuario ya registrado</p><textarea indexTab="2" cols="0" rows="0" class="correoJuego" placeholder="Email"></textarea><p class="advertenciaCorreo">debes digitar tu correo</p></div>',
+      title: '<div>  <h2 class="tituloPuntajeSwal">GAME OVER</h2> <p class="puntajeSwal">'+ score + ' ' + 'Puntos </p> <textarea indexTab="2" cols="0" rows="0" class="correoJuego" placeholder="Email"></textarea><p class="advertenciaCorreo">debes digitar tu correo</p> <textarea indexTab="1" cols="0" rows="0" class="usuarioJuego" placeholder="Usuario"></textarea><p class="advertenciaCorreo">debes digitar un nuevo usuario o un usuario ya registrado</p></div>',
       customClass: 'modalJuegoSwal',
       confirmButtonColor: '#ec3345',
       customClass: 'swalGamer',
@@ -53,6 +53,23 @@ if (ancho > 800) {
         username = $('.usuarioJuego').val()
         GameOver.registroPuntaje()
       }
+    })
+  }
+  function openswalCero() {
+    swal({
+      title: '<div>  <h2 class="tituloPuntajeSwal">GAME OVER</h2> <p class="puntajeSwal">'+ score + ' ' + 'Puntos </p></div>',
+      customClass: 'modalJuegoSwal',
+      confirmButtonColor: '#ec3345',
+      customClass: 'swalGamer',
+      confirmButtonClass: 'btnSwalJuego',
+      html: true,
+      closeOnConfirm: false,
+      showCloseButton: true,
+      // showLoaderOnConfirm: true,
+      confirmButtonText:'Cerrar',
+      allowEscapeKey: false
+    }, function(val) {
+      CeroPuntaje.VolverIntento()
     })
   }
 
@@ -201,7 +218,12 @@ if (ancho > 800) {
             nave.kill();
             balasEnemigoss.callAll('kill');
             clearInterval(descender)
-            this.state.start('GameOver')
+            if (score === 0) {
+              this.state.start('CeroPuntaje')
+
+            } else {
+              this.state.start('GameOver')
+            }
         }
       }
       if (nave.alive)
@@ -330,7 +352,12 @@ if (ancho > 800) {
             nave.kill();
             balasEnemigoss.callAll('kill');
             clearInterval(descender)
-            this.state.start('GameOver')
+            if (score === 0) {
+              this.state.start('CeroPuntaje')
+
+            } else {
+              this.state.start('GameOver')
+            }
         }
 
     },
@@ -387,6 +414,15 @@ if (ancho > 800) {
             }
         }
 
+    }
+  }
+  var CeroPuntaje = {
+    create: function() {
+      openswalCero()
+    },
+    VolverIntento: function() {
+      swal.close()
+      this.state.start('HomeState')
     }
   }
   var GameOver = {
@@ -502,6 +538,7 @@ if (ancho > 800) {
   game.state.add('HomeState', HomeState)
   game.state.add('InitGame', InitGame)
   game.state.add('GameOver', GameOver)
+  game.state.add('CeroPuntaje', CeroPuntaje)
   game.state.add('Reset', Reset)
   game.state.add('Ranking', Ranking)
   game.state.start('HomeState')
