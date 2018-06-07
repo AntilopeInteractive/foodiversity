@@ -68,6 +68,64 @@ function reset(req, res) {
   })
 }
 
+function reiniciarJugadores(req, res) {
+  Juego.collection.drop((err, elim) => {
+    if (err) {
+      console.log(err)
+    }
+    Ranking.findOne({id: 'foodiversity'},(err, rank) => {
+      if (err) {
+        console.log(err)
+      }
+      rank.puntajes = []
+      rank.usuarios = []
+      rank. fechas = []
+      rank.save((err, reset) => {
+        if (err) {
+          console.log(err)
+        }
+        res.send({
+          mensaje: 'Jugadores Eliminados'
+        })
+      })
+    })
+  })
+}
+function reiniciarNewsletter(req, res) {
+  Newsletter.collection.drop((err, elim) => {
+    if (err) {
+      console.log(err)
+    }
+    res.send({
+      mensaje: 'Newsletter Eliminado'
+    })
+  })
+}
+function reiniciarReferidos(req, res) {
+  Referidos.collection.drop((err, elim) => {
+    if (err) {
+      console.log(err)
+    }
+    res.send({
+      mensaje: 'Referidos Eliminados'
+    })
+  })
+}
+function reiniciarCupones(req, res) {
+  Cupones.collection.drop((err, elim) => {
+    if (err) {
+      console.log(err)
+    }
+    res.send({
+      mensaje: 'Cupones Eliminados'
+    })
+  })
+}
+
 module.exports = {
-  reset
+  reset,
+  reiniciarJugadores,
+  reiniciarNewsletter,
+  reiniciarReferidos,
+  reiniciarCupones
 }

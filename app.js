@@ -102,6 +102,13 @@ app.post('/deleteParticipante', Participantes.deleteParticipante)
 app.get('/getParticipantes', Participantes.getParticipantes)
 app.post('/votar', Participantes.votar)
 app.get('/admin/reset', Reset.reset)
+app.get('/admin/reiniciarJugadores', Reset.reiniciarJugadores)
+app.get('/admin/reiniciarNewsletter', Reset.reiniciarNewsletter)
+app.get('/admin/reiniciarReferidos', Reset.reiniciarReferidos)
+app.get('/admin/reiniciarCupones', Reset.reiniciarCupones)
+
+
+
 
 //inicializar passport
 app.use(passport.initialize())
